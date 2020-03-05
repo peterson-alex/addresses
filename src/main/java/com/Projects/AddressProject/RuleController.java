@@ -18,6 +18,12 @@ public class RuleController {
         return ruleRepository.findByCountry(country);
     }
 
+    // Returns rule associated with iso2
+    @GetMapping("api/rule")
+    public RuleModel getRuleModelByISO2(@RequestParam(value = "iso2") String iso2) {
+        return ruleRepository.findByISO2(iso2);
+    }
+
     @GetMapping("/api/rule")
     public List<RuleModel> getAllRuleModels() {
         return ruleRepository.findAll();
