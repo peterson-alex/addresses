@@ -12,8 +12,8 @@ public class RuleModel {
     public String id;
 
     public String country; // full name of country, aka 'United States'
-    public String iso2; // two-letter country code, aka 'US'
-    public String iso3; // three letter country code, aka 'USA'
+    public String ISO2; // two-letter country code, aka 'US'
+    public String ISO3; // three letter country code, aka 'USA'
     public List<AddressFieldModel> AddressFieldList;
 
     // default constructor
@@ -24,8 +24,8 @@ public class RuleModel {
     // constructor
     public RuleModel(String country, String iso2, String iso3, List<AddressFieldModel> AddressFieldList) {
         this.country = country;
-        this.iso2 = iso2;
-        this.iso3 = iso3;
+        this.ISO2 = iso2;
+        this.ISO3 = iso3;
         this.AddressFieldList = AddressFieldList; // TODO - validate this before assigned
     }
 

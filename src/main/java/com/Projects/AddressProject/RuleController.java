@@ -18,28 +18,19 @@ public class RuleController {
         return ruleRepository.findByCountry(country);
     }
 
-    // Returns rule associated with iso2
-    @GetMapping("api/rule")
-    public RuleModel getRuleModelByISO2(@RequestParam(value = "iso2") String iso2) {
-        return ruleRepository.findByISO2(iso2);
-    }
-
-    // Returns the rule associated with iso3
-    @GetMapping("api/rule")
-    public RuleModel getRuleModelByISO3(@RequestParam(value = "iso3") String iso3) {
-        return ruleRepository.findByISO3(iso3);
-    }
-
-    @GetMapping("/api/rule")
+    // Retrieves every address rule in database
+    @GetMapping("/api/rule/all")
     public List<RuleModel> getAllRuleModels() {
         return ruleRepository.findAll();
     }
 
+    // Retrieves address rule for specified id
     @GetMapping("api/rule/id")
     public Optional<RuleModel> getRuleModelById(@RequestParam(value = "id") String id) {
         return ruleRepository.findById(id);
     }
 
+    // Posts a new rule to the database
     @PostMapping("api/rule")
     public RuleModel createRule(@RequestBody RuleModel ruleModel)
     {
