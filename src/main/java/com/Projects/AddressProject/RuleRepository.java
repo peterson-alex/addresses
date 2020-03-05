@@ -9,6 +9,8 @@ import java.util.List;
 public interface RuleRepository extends MongoRepository<RuleModel, String> {
 
     public RuleModel findByCountry(@Param("country") String country);
+    public RuleModel findByISO2(@Param("iso2") String iso2);
+    public RuleModel findByISO3(@Param("iso3") String iso3);
     public List<RuleModel> getAllRules(); // retrieves all rules from database
 
 }
