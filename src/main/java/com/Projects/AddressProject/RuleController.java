@@ -14,6 +14,11 @@ public class RuleController {
     @Autowired
     private RuleRepository ruleRepository;
 
+    // Dependency injection
+    public RuleController(RuleRepository ruleRepository) {
+        this.ruleRepository = ruleRepository;
+    }
+
     // Returns the rule associated with the country name
     @GetMapping("/rule")
     public RuleModel getRuleModelByCountry(@RequestParam(value = "country") String country) {
