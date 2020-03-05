@@ -8,43 +8,44 @@ import java.util.Optional;
 import java.util.regex.*;
 
 @RestController
+@RequestMapping("/api")
 public class RuleController {
 
     @Autowired
     private RuleRepository ruleRepository;
 
     // Returns the rule associated with the country name
-    @GetMapping("/api/rule")
+    @GetMapping("/rule")
     public RuleModel getRuleModelByCountry(@RequestParam(value = "country") String country) {
         return ruleRepository.findByCountry(country);
     }
 
     // Retrieves every address rule in database
-    @GetMapping("/api/rule/all")
+    @GetMapping("/rule/all")
     public List<RuleModel> getAllRuleModels() {
         return ruleRepository.findAll();
     }
 
     // Retrieves address rule for specified id
-    @GetMapping("api/rule/id")
+    @GetMapping("/rule/id")
     public Optional<RuleModel> getRuleModelById(@RequestParam(value = "id") String id) {
         return ruleRepository.findById(id);
     }
 
     // Retrieves the address rule for specified iso2
-    @GetMapping("api/rule/iso2")
+    @GetMapping("/rule/iso2")
     public RuleModel getRuleModelByISO2(@RequestParam(value = "iso2") String iso2) {
         return ruleRepository.findByISO2(iso2);
     }
 
     // Retrieves the address rule for specified iso3
-    @GetMapping("api/rule/iso3")
+    @GetMapping("/rule/iso3")
     public RuleModel getRuleModelByISO3(@RequestParam(value = "iso3") String iso3) {
         return ruleRepository.findByISO3(iso3);
     }
 
     // Posts a new rule to the database
-    @PostMapping("api/rule")
+    @PostMapping("/rule")
     public RuleModel createRule(@RequestBody RuleModel ruleModel)
     {
         if (ruleModelIsValid(ruleModel)){
@@ -54,7 +55,7 @@ public class RuleController {
     }
 
     // Posts a list of rules to the database
-    @PostMapping("api/rules")
+    @PostMapping("/rules")
     public List<RuleModel> createManyRules(@RequestBody List<RuleModel> ruleModelList) {
         return ruleRepository.saveAll(ruleModelList);
     }
