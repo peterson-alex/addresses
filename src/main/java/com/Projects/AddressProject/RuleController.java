@@ -24,6 +24,12 @@ public class RuleController {
         return ruleRepository.findByISO2(iso2);
     }
 
+    // Returns the rule associated with iso3
+    @GetMapping("api/rule")
+    public RuleModel getRuleModelByISO3(@RequestParam(value = "iso3") String iso3) {
+        return ruleRepository.findByISO3(iso3);
+    }
+
     @GetMapping("/api/rule")
     public List<RuleModel> getAllRuleModels() {
         return ruleRepository.findAll();
