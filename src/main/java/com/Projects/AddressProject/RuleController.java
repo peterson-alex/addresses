@@ -36,6 +36,12 @@ public class RuleController {
         return ruleRepository.findByISO2(iso2);
     }
 
+    // Retrieves the address rule for specified iso3
+    @GetMapping("api/rule/iso3")
+    public RuleModel getRuleModelByISO3(@RequestParam(value = "iso3") String iso3) {
+        return ruleRepository.findByISO3(iso3);
+    }
+
     // Posts a new rule to the database
     @PostMapping("api/rule")
     public RuleModel createRule(@RequestBody RuleModel ruleModel)
