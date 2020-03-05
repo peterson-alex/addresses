@@ -8,7 +8,7 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "rule", path = "rule")
 public interface RuleRepository extends MongoRepository<RuleModel, String> {
 
-    public RuleModel findByCountryName(@Param("country") String country);
+    public RuleModel findByCountry(@Param("country") String country);
     public List<RuleModel> getAllRules(); // retrieves all rules from database
 
 }

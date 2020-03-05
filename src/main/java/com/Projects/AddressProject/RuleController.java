@@ -13,7 +13,7 @@ public class RuleController {
     // Returns the rule associated with the country name
     @GetMapping("/api/rule")
     public RuleModel getRuleModel(@RequestParam(value = "country") String country) {
-        return ruleRepository.findByCountryName(country);
+        return ruleRepository.findByCountry(country);
     }
 
     @GetMapping("/api/rule")
