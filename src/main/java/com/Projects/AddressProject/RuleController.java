@@ -1,5 +1,6 @@
 package com.Projects.AddressProject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -8,11 +9,12 @@ import java.util.Optional;
 @RestController
 public class RuleController {
 
+    @Autowired
     private RuleRepository ruleRepository;
 
     // Returns the rule associated with the country name
     @GetMapping("/api/rule")
-    public RuleModel getRuleModel(@RequestParam(value = "country") String country) {
+    public RuleModel getRuleModelByCountry(@RequestParam(value = "country") String country) {
         return ruleRepository.findByCountry(country);
     }
 
