@@ -1,19 +1,22 @@
 package com.Projects.AddressProject;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
-/**Used to map to Elasticsearch entries **/
+@Document(indexName="addressSearch")
 public class AddressSearchModel {
 
     @Id
-    private String id;
+    public String id;
 
     // fields
-    private String mongoDBId;
-    private String country;
-    private String ISO2;
-    private String ISO3;
-    private String fullAddress; // full text of address except for country
+    public String mongoDBId;
+    public String country;
+    public String ISO2;
+    public String ISO3;
+    public String fullAddress; // full text of address except for country
+
+    // constructor, getters and setters below ...
 
     // default constructor
     public AddressSearchModel() {

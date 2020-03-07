@@ -16,6 +16,8 @@ public class RuleModel {
     public String ISO3; // three letter country code, aka 'USA'
     public List<AddressFieldModel> AddressFieldList;
 
+    // getters, setters, constructors below
+
     // default constructor
     public RuleModel() {
 
@@ -34,7 +36,7 @@ public class RuleModel {
 
         // fields
         public String Name; // name of field
-        public String Format; // a regex expression used to determine whether field is correct format or not
+        public String Format; // regex expression
         public boolean required; // true if field
 
         // default constructor
