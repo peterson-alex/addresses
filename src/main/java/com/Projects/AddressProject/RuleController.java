@@ -77,26 +77,26 @@ public class RuleController {
 
         // check name, format, and required fields
         int numRequiredFields = 0;
-        for (RuleModel.AddressFieldModel field : ruleModel.AddressFieldList) {
+        for (AddressFieldModel field : ruleModel.AddressFieldList) {
 
             // check that name is not null
-            if (field.Name == null) {
+            if (field.name == null) {
                 return false;
             }
 
             // check that name is not blank
-            if (field.Name.isBlank()) {
+            if (field.name.isBlank()) {
                 return false;
             }
 
             // check that name is not empty
-            if (field.Name.isEmpty()) {
+            if (field.name.isEmpty()) {
                 return false;
             }
 
             // check if regex is valid
             try {
-                Pattern.compile(field.Format);
+                Pattern.compile(field.format);
             } catch (PatternSyntaxException ex) {
                 return false;
             }

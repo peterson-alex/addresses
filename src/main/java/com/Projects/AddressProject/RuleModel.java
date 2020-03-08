@@ -2,6 +2,7 @@ package com.Projects.AddressProject;
 
 import org.apache.tomcat.jni.Address;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.List;
 
@@ -31,17 +32,6 @@ public class RuleModel {
         this.AddressFieldList = AddressFieldList; // TODO - validate this before assigned
     }
 
-    // Nested class used to model the fields
-    public class AddressFieldModel {
 
-        // fields
-        public String Name; // name of field
-        public String Format; // regex expression
-        public boolean required; // true if field
-
-        // default constructor
-        public AddressFieldModel() {
-        }
-    }
 }
 
