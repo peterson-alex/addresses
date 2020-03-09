@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-public class AddressSearchController {
+public class SearchController {
 
     @Autowired
     private AddressSearchRepository addressSearchRepository;
@@ -29,7 +29,7 @@ public class AddressSearchController {
     private AddressRepository addressRepository;
 
     // dependency injection
-    public AddressSearchController(AddressSearchRepository addressSearchRepository,
+    public SearchController(AddressSearchRepository addressSearchRepository,
                                    AddressRepository addressRepository) {
         this.addressSearchRepository = addressSearchRepository;
         this.addressRepository = addressRepository;
