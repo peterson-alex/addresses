@@ -12,8 +12,6 @@ public class SearchModel {
     // fields
     public String mongoDBId;
     public String country;
-    public String ISO2;
-    public String ISO3;
     public String fullAddress; // full text of address except for country
 
     // constructor, getters and setters below ...
@@ -24,11 +22,9 @@ public class SearchModel {
     }
 
     // constructor
-    public SearchModel(String mongoDBId, String country, String ISO2, String ISO3, String fullAddress) {
+    public SearchModel(String mongoDBId, String country, String fullAddress) {
         this.mongoDBId = mongoDBId;
         this.country = country;
-        this.ISO2 = ISO2;
-        this.ISO3 = ISO3;
         this.fullAddress = fullAddress;
     }
 }

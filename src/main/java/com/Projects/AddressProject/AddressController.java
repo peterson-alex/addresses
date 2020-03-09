@@ -60,7 +60,7 @@ public class AddressController {
 
             // create AddressSearchModel
             SearchModel searchModel = new SearchModel(mongoID,
-                    postedAddressModel.country,postedAddressModel.ISO2, postedAddressModel.ISO3,
+                    postedAddressModel.country,
                     fullAddress);
 
             // forward address search model to elasticsearch repository
