@@ -13,8 +13,6 @@ public class RuleModel {
     public String id;
 
     public String country; // full name of country, aka 'United States'
-    public String ISO2; // two-letter country code, aka 'US'
-    public String ISO3; // three letter country code, aka 'USA'
     public List<AddressFieldModel> AddressFieldList;
 
     // getters, setters, constructors below
@@ -25,10 +23,8 @@ public class RuleModel {
     }
 
     // constructor
-    public RuleModel(String country, String iso2, String iso3, List<AddressFieldModel> AddressFieldList) {
+    public RuleModel(String country, List<AddressFieldModel> AddressFieldList) {
         this.country = country;
-        this.ISO2 = iso2;
-        this.ISO3 = iso3;
         this.AddressFieldList = AddressFieldList; // TODO - validate this before assigned
     }
 

@@ -78,27 +78,11 @@ public class AddressController {
 
         System.out.println("Inside address checker");
 
-
         // check country
         if (!addressModel.country.equals(ruleModel.country)) {
             return false;
         }
         System.out.println("Country valid!");
-
-        // check iso2
-        if (!addressModel.ISO2.equals(ruleModel.ISO2)) {
-            System.out.println(ruleModel.ISO2);
-            System.out.println(addressModel.ISO2);
-            System.out.println("ISO2 not valid!");
-            return false;
-        }
-        System.out.println("ISO2 valid!");
-
-        // check iso3
-        if (!addressModel.ISO3.equals(ruleModel.ISO3)) {
-            return false;
-        }
-        System.out.println("ISO3 valid!");
 
         // loop through address fields of address model and validate each
         for (Map.Entry<String, Object> field : addressModel.Address.entrySet()) {
