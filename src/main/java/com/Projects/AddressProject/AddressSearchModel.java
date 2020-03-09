@@ -3,7 +3,7 @@ package com.Projects.AddressProject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-@Document(indexName="addressSearch")
+@Document(indexName="address_search")
 public class AddressSearchModel {
 
     @Id
