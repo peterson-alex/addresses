@@ -44,7 +44,7 @@ public class AddressController {
 
         // get rule model for that country
         RuleModel ruleModel = ruleRepository.findByCountry(addressModel.country);
-        System.out.println("Rule model for country " + ruleModel.country + "selected");
+        System.out.println("Rule model for country " + ruleModel.country + " selected");
 
         // if address is valid, post to database elasticsearch
         if (addressIsValid(addressModel, ruleModel)) {
@@ -109,6 +109,7 @@ public class AddressController {
 
             // get regex pattern
             String regex = getFieldRegexPattern(field.getKey(), ruleModel);
+            System.out.println(regex);
 
             // check if field matches regex in rule model
             if (!Pattern.compile(regex).matcher((String)field.getValue()).matches()) {
