@@ -34,7 +34,7 @@ public class AddressController {
 
     // returns the address specified by the id
     @GetMapping("/address/{id}")
-    public Optional<AddressModel> getAddressById(@RequestParam(value = "id") String id) {
+    public Optional<AddressModel> getAddressById(@PathVariable String id) {
         return addressRepository.findById(id);
     }
 
