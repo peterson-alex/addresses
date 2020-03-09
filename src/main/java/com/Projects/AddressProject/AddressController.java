@@ -44,6 +44,7 @@ public class AddressController {
 
         // get rule model for that country
         RuleModel ruleModel = ruleRepository.findByCountry(addressModel.country);
+        System.out.println("Rule model for country " + ruleModel.country + "selected");
 
         // if address is valid, post to database elasticsearch
         if (addressIsValid(addressModel, ruleModel)) {
@@ -72,36 +73,51 @@ public class AddressController {
     // Ensure that address is valid according to address rules
     private boolean addressIsValid(AddressModel addressModel, RuleModel ruleModel) {
 
+        System.out.println("Inside address checker");
+
+
         // check country
         if (!addressModel.country.equals(ruleModel.country)) {
             return false;
         }
+        System.out.println("Country valid!");
 
         // check iso2
-        if (addressModel.ISO2.equals((ruleModel.ISO2))) {
+        if (!addressModel.ISO2.equals(ruleModel.ISO2)) {
+            System.out.println(ruleModel.ISO2);
+            System.out.println(addressModel.ISO2);
+            System.out.println("ISO2 not valid!");
             return false;
         }
+        System.out.println("ISO2 valid!");
 
         // check iso3
-        if (addressModel.ISO3.equals(ruleModel.ISO3)) {
+        if (!addressModel.ISO3.equals(ruleModel.ISO3)) {
             return false;
         }
+        System.out.println("ISO3 valid!");
 
         // loop through address fields of address model and validate each
         for (Map.Entry<String, Object> field : addressModel.Address.entrySet()) {
 
             // check if field name in rule model
             if (!fieldInRuleModel(field.getKey(), ruleModel)) {
+                System.out.println("Field name not in rule model!");
                 return false;
             }
+            System.out.println("Field name in rule model!");
 
             // get regex pattern
             String regex = getFieldRegexPattern(field.getKey(), ruleModel);
 
             // check if field matches regex in rule model
             if (!Pattern.compile(regex).matcher((String)field.getValue()).matches()) {
+                System.out.println((String)field.getValue());
+                System.out.println("Regex does not match!");
                 return false;
             }
+            System.out.println("Regex matches");
+
         }
 
         // loop through address fields of rule model. If field required,
@@ -109,15 +125,20 @@ public class AddressController {
         for (AddressFieldModel fieldModel : ruleModel.AddressFieldList) {
             if (fieldModel.required) {
                 if (!addressModel.Address.containsKey(fieldModel.name)){
+                    System.out.println("Address does not contain required field " + fieldModel.name);
                     return false;
                 }
+                System.out.println("Address contains required field " + fieldModel.name);
 
                 // value must be present - cannot be null
                 if (addressModel.Address.get(fieldModel.name) == null) {
+                    System.out.println("Address field " + fieldModel.name +  " is null!");
                     return false;
                 }
+                System.out.println("Address field " + fieldModel.name +  " is not null!");
             }
         }
+        System.out.println("All checks pass, address is valid!");
 
         // all checks passed
         return true;
