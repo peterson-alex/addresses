@@ -22,14 +22,16 @@ public class AddressController {
     private RuleRepository ruleRepository;
 
     @Autowired
-    private AddressSearchRepository addressSearchRepository;
+    private AddressSearchRepository searchRepository;
+
+
 
     // Dependency injection
     public AddressController(AddressRepository addressRepository, RuleRepository ruleRepository,
-                             AddressSearchRepository addressSearchRepository) {
+                             AddressSearchRepository searchRepository) {
         this.addressRepository = addressRepository;
         this.ruleRepository = ruleRepository;
-        this.addressSearchRepository = addressSearchRepository;
+        this.searchRepository = searchRepository;
     }
 
     // returns the address specified by the id
@@ -57,12 +59,13 @@ public class AddressController {
             String fullAddress = getFullAddress(postedAddressModel);
 
             // create AddressSearchModel
-            AddressSearchModel addressSearchModel = new AddressSearchModel(mongoID,
+            SearchModel searchModel = new SearchModel(mongoID,
                     postedAddressModel.country,postedAddressModel.ISO2, postedAddressModel.ISO3,
                     fullAddress);
 
             // forward address search model to elasticsearch repository
-            addressSearchRepository.save(addressSearchModel);
+            searchRepository.save(searchModel);
+
 
             return postedAddressModel;
         }

@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 @Document(indexName="address_search")
-public class AddressSearchModel {
+public class SearchModel {
 
     @Id
     public String id;
@@ -19,12 +19,12 @@ public class AddressSearchModel {
     // constructor, getters and setters below ...
 
     // default constructor
-    public AddressSearchModel() {
+    public SearchModel() {
 
     }
 
     // constructor
-    public AddressSearchModel(String mongoDBId, String country, String ISO2, String ISO3, String fullAddress) {
+    public SearchModel(String mongoDBId, String country, String ISO2, String ISO3, String fullAddress) {
         this.mongoDBId = mongoDBId;
         this.country = country;
         this.ISO2 = ISO2;

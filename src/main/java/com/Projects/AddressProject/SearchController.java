@@ -1,22 +1,21 @@
 package com.Projects.AddressProject;
 
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.elasticsearch.core.query.StringQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.elasticsearch.repository.query.ElasticsearchQueryMethod;
 import org.springframework.web.bind.annotation.*;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 @RestController
 @RequestMapping("/api")
@@ -28,33 +27,40 @@ public class SearchController {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private ElasticsearchOperations operations;
+
     // dependency injection
     public SearchController(AddressSearchRepository addressSearchRepository,
-                                   AddressRepository addressRepository) {
+                            AddressRepository addressRepository, ElasticsearchOperations operations) {
         this.addressSearchRepository = addressSearchRepository;
         this.addressRepository = addressRepository;
+        this.operations = operations;
     }
 
     // search for a specific address. If country parameter provided, will only search results
     // of that country.
     @GetMapping("/search")
-    public List<AddressModel> searchAddresses(@RequestBody String addressSearchTerms,
-                                              @RequestParam(value = "country", required = false)
-                                                      String country) {
+    public List<AddressModel> searchAddresses(@RequestBody SearchModel addressSearchModel) {
+
+        String fullAddress = addressSearchModel.fullAddress;
+        String country = addressSearchModel.country;
+        System.out.println("Full Address search terms = " + fullAddress);
+        System.out.println("Country = " + country);
 
         // results to be obtained
-        Iterable<AddressSearchModel> searchResults;
+        Iterable<SearchModel> searchResults;
 
         // obtain search results from Elasticsearch
         if (country != null) {
-            searchResults = executeSearchQuery(addressSearchTerms, country);
+            searchResults = executeSearchQuery(fullAddress, country);
         } else { // no country param provided
-            searchResults = executeSearchQuery(addressSearchTerms);
+            searchResults = executeSearchQuery(fullAddress);
         }
 
         // obtain mongoDBId's from search results
         List<String> mongoIdList = new LinkedList<>();
-        for (AddressSearchModel model : searchResults) {
+        for (SearchModel model : searchResults) {
             mongoIdList.add(model.mongoDBId);
         }
 
@@ -65,23 +71,31 @@ public class SearchController {
         return (List<AddressModel>)results;
     }
 
-    private Iterable<AddressSearchModel> executeSearchQuery(String fullAddress) {
-
-        // construct query
-        BoolQueryBuilder query = QueryBuilders.boolQuery()
-                .filter(QueryBuilders.fuzzyQuery("fullAddress", fullAddress));
-
-        return addressSearchRepository.search(query);
+    // Obtain elasticsearch document with specified id
+    @GetMapping("/search/{id}")
+    public Optional<SearchModel> findById(@PathVariable String id) {
+        return addressSearchRepository.findById(id);
     }
 
-    private Iterable<AddressSearchModel> executeSearchQuery(String fullAddress, String country) {
+    // Search for addresses using term fullAddress
+    private Iterable<SearchModel> executeSearchQuery(String fullAddress) {
 
-            // construct query
-            BoolQueryBuilder query = QueryBuilders.boolQuery()
-                    .filter(QueryBuilders.matchQuery("country", country))
-                    .filter(QueryBuilders.fuzzyQuery("fullAddress", fullAddress));
+        SearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.matchQuery("fullAddress", fullAddress))
+                .build();
 
-           return addressSearchRepository.search(query);
+        return operations.queryForList(query, SearchModel.class);
+    }
+
+    // Obtains results from elasticsearch where country is exact match
+    private Iterable<SearchModel> executeSearchQuery(String fullAddress, String country) {
+
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.matchQuery("fullAddress", fullAddress))
+                .withQuery(QueryBuilders.matchPhraseQuery("country", country))
+                .build();
+
+        return operations.queryForList(searchQuery, SearchModel.class);
     }
 
     /**

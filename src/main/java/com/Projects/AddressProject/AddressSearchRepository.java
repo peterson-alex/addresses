@@ -5,7 +5,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 import java.util.List;
 
-public interface AddressSearchRepository extends ElasticsearchRepository<AddressSearchModel, String> {
+public interface AddressSearchRepository extends ElasticsearchRepository<SearchModel, String> {
 
 }
 
