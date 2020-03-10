@@ -65,10 +65,18 @@ public class SearchController {
         }
 
         // obtain addressModels from addressRepository
-        Iterable<AddressModel> results = addressRepository.findAllById(mongoIdList);
+        // Iterable<AddressModel> results = addressRepository.findAllById(mongoIdList);
+        List<AddressModel> results = new LinkedList<AddressModel>();
+
+        for (String id : mongoIdList) {
+            Optional<AddressModel> model = addressRepository.findById(id);
+            if (model.isPresent()) {
+                results.add(model.get());
+            }
+        }
 
         // return Address Models
-        return (List<AddressModel>)results;
+        return results;
     }
 
     // Obtain elasticsearch document with specified id
