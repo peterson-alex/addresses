@@ -6,10 +6,7 @@ import org.apache.lucene.analysis.CharArrayMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.*;
 
 @RestController
@@ -41,7 +38,42 @@ public class AddressController {
         return addressRepository.findById(id);
     }
 
-    // posts an address to the service.
+    // Facilitates bulk posting of addresses
+    @PostMapping("address/bulk")
+    public boolean postBulkAddresses(@RequestBody List<AddressModel> addressModelList){
+
+        List<AddressModel> validAddresses = new LinkedList<>();
+        for(AddressModel addressModel : addressModelList) {
+            RuleModel ruleModel = ruleRepository.findByCountry(addressModel.country);
+
+            // check if address is valid - if it is, add to list
+            if (addressIsValid(addressModel, ruleModel)) {
+                validAddresses.add(addressModel);
+            }
+        }
+
+        // all addresses saved to mongo
+        List<AddressModel> postedAddressList = addressRepository.saveAll(validAddresses);
+
+
+        List<SearchModel> searchModelList = new LinkedList<>();
+
+        // obtain all addresses to save to Elasticsearch
+        for(AddressModel postedAddress : postedAddressList) {
+            // get mongoDBID and full address
+            SearchModel searchModel = new SearchModel(postedAddress.id,
+                    postedAddress.country,
+                    getFullAddress(postedAddress));
+
+            searchModelList.add(searchModel);
+        }
+
+        searchRepository.saveAll(searchModelList);
+
+        return true;
+    }
+
+    // posts a single address to the service.
     @PostMapping("/address")
     public AddressModel postNewAddress(@RequestBody AddressModel addressModel) {
 
