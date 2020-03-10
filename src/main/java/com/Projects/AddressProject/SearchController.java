@@ -3,6 +3,7 @@ package com.Projects.AddressProject;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -90,9 +91,10 @@ public class SearchController {
 
         SearchQuery query = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.matchQuery("fullAddress", fullAddress))
+                .withPageable(PageRequest.of(0,10))
                 .build();
 
-        return operations.queryForList(query, SearchModel.class);
+        return operations.queryForPage(query, SearchModel.class);
     }
 
     // Obtains results from elasticsearch where country is exact match
