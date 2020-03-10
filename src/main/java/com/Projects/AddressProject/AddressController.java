@@ -2,6 +2,7 @@ package com.Projects.AddressProject;
 
 
 import com.sun.jna.WString;
+import org.apache.lucene.analysis.CharArrayMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -161,14 +162,22 @@ public class AddressController {
         StringBuilder stringBuilder = new StringBuilder();
 
         // iterate over address fields and add to search query
+
+        int length = addressModel.Address.size();
+        int count = 1;
         for (Map.Entry<String, Object> entry : addressModel.Address.entrySet()) {
             String s = (String)entry.getValue();
 
             // add to search string if s not null, empty, or blank
             if (s != null && !s.isEmpty() && !s.isBlank()) {
                 stringBuilder.append(s);
-                stringBuilder.append(" ");
+
+                // only add space if not last term
+                if (count < length) {
+                    stringBuilder.append(" ");
+                }
             }
+            count++;
         }
 
         return stringBuilder.toString();
