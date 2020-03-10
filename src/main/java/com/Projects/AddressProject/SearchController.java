@@ -101,8 +101,8 @@ public class SearchController {
     private Iterable<SearchModel> executeSearchQuery(String fullAddress, String country) {
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.matchQuery("fullAddress", fullAddress))
                 .withQuery(QueryBuilders.matchPhraseQuery("country", country))
+                .withQuery(QueryBuilders.matchQuery("fullAddress", fullAddress))
                 .build();
 
         return operations.queryForList(searchQuery, SearchModel.class);

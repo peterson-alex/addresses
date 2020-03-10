@@ -44,6 +44,7 @@ public class RuleController {
         if (ruleModelIsValid(ruleModel)){
             return ruleRepository.save(ruleModel);
         }
+        System.out.println("Rule Model not valid - not saving");
         return ruleModel;
     }
 
@@ -60,6 +61,7 @@ public class RuleController {
 
         // check that at least one field in ruleModel.addressfields
         if (ruleModel.AddressFieldList.size() < 1) {
+            System.out.println("No Fields in Field list");
             return false;
         }
 
@@ -69,16 +71,19 @@ public class RuleController {
 
             // check that name is not null
             if (field.name == null) {
+                System.out.println("Field Name is null");
                 return false;
             }
 
             // check that name is not blank
             if (field.name.isBlank()) {
+                System.out.println("Field Name is blank");
                 return false;
             }
 
             // check that name is not empty
             if (field.name.isEmpty()) {
+                System.out.println("Field Name is emtpy");
                 return false;
             }
 
@@ -86,6 +91,7 @@ public class RuleController {
             try {
                 Pattern.compile(field.format);
             } catch (PatternSyntaxException ex) {
+                System.out.println("Regex invalid " + field.name);
                 return false;
             }
 
@@ -96,6 +102,7 @@ public class RuleController {
 
         // at least one field must be required
         if (numRequiredFields < 1) {
+            System.out.println("No required fields");
             return false;
         }
 

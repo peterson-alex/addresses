@@ -40,25 +40,36 @@ public class AddressController {
 
     // Facilitates bulk posting of addresses
     @PostMapping("address/bulk")
-    public boolean postBulkAddresses(@RequestBody List<AddressModel> addressModelList){
+    public boolean postBulkAddresses(@RequestBody AddressModelWrapper addressModelWrapper){
 
         List<AddressModel> validAddresses = new LinkedList<>();
-        for(AddressModel addressModel : addressModelList) {
+
+        System.out.println("Now validating addresses... ");
+
+        int validationCount = 0;
+        for(AddressModel addressModel : addressModelWrapper.getAddressModelList()) {
             RuleModel ruleModel = ruleRepository.findByCountry(addressModel.country);
 
             // check if address is valid - if it is, add to list
             if (addressIsValid(addressModel, ruleModel)) {
                 validAddresses.add(addressModel);
             }
+            validationCount++;
+            System.out.println("Validating " + validationCount);
         }
+
+        System.out.println("Valid addresses: " + validAddresses.size());
+        System.out.println("Now saving addresses to mongo ... ");
 
         // all addresses saved to mongo
         List<AddressModel> postedAddressList = addressRepository.saveAll(validAddresses);
-
+        System.out.println("Finished saving addresses to Mongo!");
 
         List<SearchModel> searchModelList = new LinkedList<>();
+        System.out.println("Now creating search models ... ");
 
         // obtain all addresses to save to Elasticsearch
+        int transformCount = 0;
         for(AddressModel postedAddress : postedAddressList) {
             // get mongoDBID and full address
             SearchModel searchModel = new SearchModel(postedAddress.id,
@@ -66,9 +77,15 @@ public class AddressController {
                     getFullAddress(postedAddress));
 
             searchModelList.add(searchModel);
+            transformCount++;
+            System.out.println("Transforming " + transformCount);
         }
 
+        System.out.println("Finished creating search models!");
+        System.out.println("Now inserting search models to elasticsearch ... ");
+
         searchRepository.saveAll(searchModelList);
+        System.out.println("Finished saving search models to elasticsearch!");
 
         return true;
     }
